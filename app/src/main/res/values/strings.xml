@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Datadog RUM</string>
+    <string name="title_activity_organization_data_screen">OrganizationDataScreen</string>
+    <string name="title_activity_organization_screen">OrganizationScreen</string>
+</resources>

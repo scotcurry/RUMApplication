@@ -1,0 +1,37 @@
+package org.curryware.rumapplication.ui.composables
+
+import android.util.Log
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import com.datadog.android.Datadog
+
+@Composable
+fun AppNavigationComponent(navController: NavHostController) {
+
+    val TAG = "AppNavigationComponent"
+    if (Datadog.isInitialized()) {
+        Log.i(TAG, "Datadog is Initialized")
+    } else {
+        Log.e(TAG, "Datadog not Initialized")
+    }
+
+    NavHost(navController = navController, startDestination = "apiFunctionScreen", modifier = Modifier
+        .fillMaxWidth()) {
+
+        composable("apiFunctionScreen") {
+            APIFunctionsScreen(navController = navController)
+        }
+
+        composable("organizationScreen") {
+            OrganizationScreen(navController)
+        }
+
+        composable("validateAPIScreen") {
+            ValidateAPIKeyScreen(navController)
+        }
+    }
+}
