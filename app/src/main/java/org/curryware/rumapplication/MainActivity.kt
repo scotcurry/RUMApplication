@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.datadog.android.Datadog
-import com.datadog.android.DatadogSite
 import com.datadog.android.core.configuration.Configuration
 import com.datadog.android.core.configuration.Credentials
 import com.datadog.android.log.Logger
@@ -56,8 +55,8 @@ class MainActivity : ComponentActivity() {
 
     private fun configureDatadog(): Logger {
 
-        val clientToken = BuildConfig.ANDROID_CLIENT_TOKEN
-        val applicationId = BuildConfig.ANDROID_APP_ID
+        // val clientToken = BuildConfig.ANDROID_CLIENT_TOKEN
+        // val applicationId = BuildConfig.ANDROID_APP_ID
         val trackingConsent = TrackingConsent.GRANTED
 
         Datadog.initialize(
@@ -101,10 +100,12 @@ class MainActivity : ComponentActivity() {
 
     // This code needs research.  It seems like this is a way to determine what views needs to be
     // traced, but not clear to me yet.
-    private fun trackingStrategy(): ActivityViewTrackingStrategy {
-
-        return ActivityViewTrackingStrategy(false, AcceptAllActivities())
-    }
+//    private fun trackingStrategy(): NavigationViewTrackingStrategy {
+//
+//        return trackingStrategy = NavigationViewTrackingStrategy(
+//
+//        )
+//    }
 
 
     private fun createDatadogConfiguration(): Configuration {
@@ -117,7 +118,6 @@ class MainActivity : ComponentActivity() {
         )
             .sampleTelemetry(80F)
             .setFirstPartyHosts(tracedHosts)
-            .useViewTrackingStrategy(trackingStrategy())
 
         return configBuilder.build()
     }
