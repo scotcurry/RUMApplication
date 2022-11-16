@@ -18,6 +18,7 @@ import com.datadog.android.core.configuration.Credentials
 import com.datadog.android.log.Logger
 import com.datadog.android.privacy.TrackingConsent
 import com.datadog.android.rum.GlobalRum
+import com.datadog.android.rum.RumActionType
 import com.datadog.android.rum.RumMonitor
 import com.datadog.android.rum.tracking.*
 import org.curryware.rumapplication.ui.composables.AppNavigationComponent
@@ -68,8 +69,13 @@ class MainActivity : ComponentActivity() {
 
         val monitor = RumMonitor.Builder().build()
         GlobalRum.registerIfAbsent(monitor)
+        val someRandomMap = mutableMapOf<String, String>()
+        someRandomMap["Key"] = "value"
+        monitor.addUserAction(RumActionType.CLICK, "Calling monitor", someRandomMap)
+        monitor.startView("StartView", "StartView", someRandomMap)
 
-        Datadog.setVerbosity(Log.INFO)
+        Datadog.setVerbosity(Log.DEBUG)
+        monitor.stopView("StartView")
 
         return Logger.Builder()
             .setLoggerName("android_logger")
@@ -100,12 +106,10 @@ class MainActivity : ComponentActivity() {
 
     // This code needs research.  It seems like this is a way to determine what views needs to be
     // traced, but not clear to me yet.
-//    private fun trackingStrategy(): NavigationViewTrackingStrategy {
-//
-//        return trackingStrategy = NavigationViewTrackingStrategy(
-//
-//        )
-//    }
+    private fun trackingStrategy(): ActivityViewTrackingStrategy {
+
+        return ActivityViewTrackingStrategy(false, AcceptAllActivities())
+    }
 
 
     private fun createDatadogConfiguration(): Configuration {
@@ -117,6 +121,7 @@ class MainActivity : ComponentActivity() {
             rumEnabled = true
         )
             .sampleTelemetry(80F)
+            .useViewTrackingStrategy(trackingStrategy())
             .setFirstPartyHosts(tracedHosts)
 
         return configBuilder.build()

@@ -1,9 +1,7 @@
 package org.curryware.rumapplication.resthandler
 
-import okhttp3.Interceptor
+import com.datadog.android.DatadogInterceptor
 import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.internal.http2.Header
 import okhttp3.logging.HttpLoggingInterceptor
 import org.curryware.rumapplication.BuildConfig
 import retrofit2.Retrofit
@@ -14,10 +12,7 @@ object RestRetroFitBuilder {
     private val retrofit by lazy {
 
         val httpClient = OkHttpClient()
-        val logging: HttpLoggingInterceptor = HttpLoggingInterceptor().setLevel(
-            HttpLoggingInterceptor.Level.BASIC
-        )
-
+        httpClient.newBuilder().addInterceptor(DatadogInterceptor()).build()
 
         val apiURL = BuildConfig.API_URL
 
