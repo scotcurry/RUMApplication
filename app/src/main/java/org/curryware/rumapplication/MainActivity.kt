@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.datadog.android.Datadog
+import com.datadog.android.DatadogSite
 import com.datadog.android.core.configuration.Configuration
 import com.datadog.android.core.configuration.Credentials
 import com.datadog.android.log.Logger
@@ -90,11 +91,17 @@ class MainActivity : ComponentActivity() {
     // Not much to explain here.  For now guessing about ENV and VARIANT.
     private fun createDatadogCredentials(): Credentials {
 
+        val appID = BuildConfig.ANDROID_APP_ID
+        val clientToken = BuildConfig.ANDROID_CLIENT_TOKEN
+
+        Log.i(TAG, appID)
+        Log.i(TAG, clientToken)
+
         return Credentials(
             clientToken = BuildConfig.ANDROID_CLIENT_TOKEN,
             envName = ENV_TAG,
             variant = VARIANT_TAG,
-            rumApplicationId = BuildConfig.APPLICATION_ID
+            rumApplicationId = BuildConfig.ANDROID_APP_ID
         )
     }
 
@@ -120,8 +127,9 @@ class MainActivity : ComponentActivity() {
             crashReportsEnabled = true,
             rumEnabled = true
         )
-            .sampleTelemetry(80F)
+            .sampleTelemetry(100F)
             .useViewTrackingStrategy(trackingStrategy())
+            .useSite(DatadogSite.US1)
             .setFirstPartyHosts(tracedHosts)
 
         return configBuilder.build()

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.datadog.android.Datadog
 import com.datadog.android.log.Logger
+import com.datadog.android.rum.*
 import kotlinx.coroutines.launch
 import org.curryware.rumapplication.BuildConfig
 import org.curryware.rumapplication.apimodels.ValidateKey
@@ -16,14 +17,31 @@ class ValidateAPIKeyViewModel(private val apiHandlerRepository: APIHandlerReposi
     private val TAG: String = "ValidateAPIKeyViewModel"
     fun checkDatadogAPIKey() {
 
+        val logger = configureDatadog()
+
         if (Datadog.isInitialized()) {
-            Log.i(TAG, "Datadog is initialized")
-        } else {
-            Log.e(TAG, "Datadog not initialized!")
+            logger.i("Datadog is Initialized - Pre-Monitor")
         }
 
-        val logger = configureDatadog()
-        logger.i("ValidateAPIKey")
+        val monitor = RumMonitor.Builder().build()
+        GlobalRum.registerIfAbsent(monitor)
+        val someDebugMap = mutableMapOf<String, String>()
+        someDebugMap["Key"] = "value"
+        monitor.addUserAction(RumActionType.CLICK, "Calling monitor", someDebugMap)
+        monitor.startView("ValidateAPIKeyViewModel", "StartView", someDebugMap)
+
+        val someRandomMap = mutableMapOf<String, String>()
+        someRandomMap["Key"] = "value"
+        GlobalRum.get().addError("Error", RumErrorSource.SOURCE, null, someRandomMap)
+        monitor.stopView("ValidateAPIKeyViewModel")
+
+        if (Datadog.isInitialized()) {
+            Log.i(TAG, "Datadog is initialized - No Error")
+        } else {
+            Log.e(TAG, "Datadog not initialized! - With Error")
+        }
+
+        logger.i("ValidateAPIKey - v2")
 
         Log.i(TAG, "Launching ValidateAPIKeyViewModel")
         viewModelScope.launch {

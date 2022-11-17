@@ -12,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.datadog.android.rum.GlobalRum
+import com.datadog.android.rum.RumErrorSource
 import org.curryware.rumapplication.R
 import org.curryware.rumapplication.resthandler.RestAPIHelper
 import org.curryware.rumapplication.resthandler.RestRetroFitBuilder
@@ -22,6 +24,10 @@ import org.curryware.rumapplication.viewmodels.ValidateAPIKeyViewModelFactory
 fun ValidateAPIKeyScreen(navController: NavController) {
 
     val TAG: String = "ValidateAPIKeyScreen"
+
+    val someRandomMap = mutableMapOf<String, String>()
+    someRandomMap["Key"] = "value"
+    GlobalRum.get().addError("Error", RumErrorSource.SOURCE, null, someRandomMap)
 
     var imageID = 0
     val restAPIHelper = RestAPIHelper(RestRetroFitBuilder.restAPIWorker)
