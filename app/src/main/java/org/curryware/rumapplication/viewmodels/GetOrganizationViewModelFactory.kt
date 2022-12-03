@@ -6,12 +6,12 @@ import com.datadog.android.log.Logger
 import org.curryware.rumapplication.repositories.APIHandlerRepository
 import org.curryware.rumapplication.resthandler.RestAPIHelper
 
-class ValidateAPIKeyViewModelFactory(private val restAPIHelper: RestAPIHelper,
-                                     private val datadogLogger: Logger): ViewModelProvider.Factory {
+class GetOrganizationViewModelFactory(private val restAPIHelper: RestAPIHelper,
+                                      private val datadogLogger: Logger): ViewModelProvider.Factory {
 
     override fun <T: ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ValidateAPIKeyViewModel::class.java)) {
-            return  ValidateAPIKeyViewModel(APIHandlerRepository(restAPIHelper), datadogLogger) as T
+        if (modelClass.isAssignableFrom(GetOrganizationInfoViewModel::class.java)) {
+            return  GetOrganizationInfoViewModel(APIHandlerRepository(restAPIHelper), datadogLogger) as T
         }
         throw IllegalArgumentException("Unknown Class")
     }

@@ -35,6 +35,9 @@ android {
         buildConfigField("String", "API_URL", apikeyProperties['API_URL'])
         buildConfigField("String", "ANDROID_CLIENT_TOKEN", apikeyProperties['ANDROID_CLIENT_TOKEN'])
         buildConfigField("String", "ANDROID_APP_ID", apikeyProperties['ANDROID_APP_ID'])
+        buildConfigField("String", "USER_NAME", apikeyProperties['USER_NAME'])
+        buildConfigField("String", "USER_ID", apikeyProperties['USER_ID'])
+        buildConfigField("String", "USER_EMAIL", apikeyProperties['USER_EMAIL'])
     }
 
     buildTypes {

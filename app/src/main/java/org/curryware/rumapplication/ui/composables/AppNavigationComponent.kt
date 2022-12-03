@@ -14,9 +14,9 @@ fun AppNavigationComponent(navController: NavHostController) {
 
     val TAG = "AppNavigationComponent"
     if (Datadog.isInitialized()) {
-        Log.i(TAG, "Datadog is Initialized")
+        Log.i(TAG, "AppNavigationComponent - Datadog is Initialized")
     } else {
-        Log.e(TAG, "Datadog not Initialized")
+        Log.e(TAG, "AppNavigationComponent - Datadog NOT Initialized")
     }
 
     NavHost(navController = navController, startDestination = "apiFunctionScreen", modifier = Modifier

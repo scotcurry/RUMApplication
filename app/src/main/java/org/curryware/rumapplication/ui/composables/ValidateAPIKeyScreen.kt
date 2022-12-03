@@ -1,20 +1,21 @@
 package org.curryware.rumapplication.ui.composables
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.datadog.android.rum.GlobalRum
-import com.datadog.android.rum.RumErrorSource
+import com.datadog.android.rum.RumActionType
 import org.curryware.rumapplication.R
+import org.curryware.rumapplication.datadoghandler.DatadogConfigurator
 import org.curryware.rumapplication.resthandler.RestAPIHelper
 import org.curryware.rumapplication.resthandler.RestRetroFitBuilder
 import org.curryware.rumapplication.viewmodels.ValidateAPIKeyViewModel
@@ -23,15 +24,19 @@ import org.curryware.rumapplication.viewmodels.ValidateAPIKeyViewModelFactory
 @Composable
 fun ValidateAPIKeyScreen(navController: NavController) {
 
-    val TAG: String = "ValidateAPIKeyScreen"
+    val context = LocalContext.current
+    val logger = DatadogConfigurator.getDatadogLogger(context)
 
-    val someRandomMap = mutableMapOf<String, String>()
-    someRandomMap["Key"] = "value"
-    GlobalRum.get().addError("Error", RumErrorSource.SOURCE, null, someRandomMap)
+    // val monitor = RumMonitor.Builder().build()
+    // GlobalRum.registerIfAbsent(monitor)
+    val rumCustomAttributes = mutableMapOf<String, String>()
+    rumCustomAttributes["rumCustomAttributes"] = "Find this in a ValidateAPIScreen Custom Attributes Section"
+    GlobalRum.get().addUserAction(RumActionType.CLICK, "Calling monitor", rumCustomAttributes)
+    GlobalRum.get().startView("ValidateAPIScreen", "ValidateAPIKeyScreen", rumCustomAttributes)
 
     var imageID = 0
     val restAPIHelper = RestAPIHelper(RestRetroFitBuilder.restAPIWorker)
-    val validateAPIKeyViewModel: ValidateAPIKeyViewModel = viewModel(factory = ValidateAPIKeyViewModelFactory(restAPIHelper))
+    val validateAPIKeyViewModel: ValidateAPIKeyViewModel = viewModel(factory = ValidateAPIKeyViewModelFactory(restAPIHelper, logger))
     validateAPIKeyViewModel.checkDatadogAPIKey()
     val apiCheckData by validateAPIKeyViewModel.apiCheckReturnValue.observeAsState(initial = null)
     val isKeyValid = apiCheckData?.valid
@@ -41,11 +46,14 @@ fun ValidateAPIKeyScreen(navController: NavController) {
         R.drawable.ic_baseline_error_24
     }
 
-    Row(modifier = Modifier
-        .fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center) {
         Text("API Key Validator")
         Spacer(modifier = Modifier)
         Image(painter = painterResource(id = imageID),
             contentDescription = "Valid")
     }
+
+    GlobalRum.get().stopView("ValidateAPIScreen")
 }
