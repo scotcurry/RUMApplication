@@ -27,11 +27,15 @@ fun AppNavigationComponent(navController: NavHostController) {
         }
 
         composable("organizationScreen") {
-            OrganizationScreen(navController)
+            OrganizationScreen()
         }
 
         composable("validateAPIScreen") {
             ValidateAPIKeyScreen(navController)
+        }
+
+        composable("usageSummaryScreen") {
+            UsageSummaryScreen()
         }
     }
 }

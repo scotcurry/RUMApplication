@@ -6,7 +6,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.datadog.android.rum.GlobalRum
 import org.curryware.rumapplication.datadoghandler.DatadogConfigurator
 import org.curryware.rumapplication.resthandler.RestAPIHelper
@@ -15,7 +14,7 @@ import org.curryware.rumapplication.viewmodels.GetOrganizationInfoViewModel
 import org.curryware.rumapplication.viewmodels.GetOrganizationViewModelFactory
 
 @Composable
-fun OrganizationScreen(navController: NavController) {
+fun OrganizationScreen() {
 
     GlobalRum.get().startView("OrganizationScreen", "OrganizationScreen")
     val context = LocalContext.current
@@ -29,7 +28,7 @@ fun OrganizationScreen(navController: NavController) {
     val organizationName = organizationData?.orgs?.get(0)?.name
 
     organizationName?.also {
-        Text(organizationName!!)
+        Text(organizationName)
     }?:run {
         Text("Unknown")
     }

@@ -26,5 +26,10 @@ fun APIFunctionsScreen(navController: NavController) {
             modifier = Modifier) {
             Text(text = "Organization Details")
         }
+        Button(
+            onClick = { navController.navigate("UsageSummaryScreen") },
+            modifier = Modifier) {
+            Text(text = "Usage Summary")
+        }
     }
 }
