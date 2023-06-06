@@ -31,5 +31,10 @@ fun APIFunctionsScreen(navController: NavController) {
             modifier = Modifier) {
             Text(text = "Usage Summary")
         }
+        Button(
+            onClick = { navController.navigate(route = "SQLQueryScreen") },
+            modifier = Modifier) {
+            Text(text = "Sales Tax Query")
+        }
     }
 }

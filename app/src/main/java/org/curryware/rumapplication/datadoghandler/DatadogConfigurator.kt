@@ -87,7 +87,8 @@ class DatadogConfigurator {
         // and categorized as such in your RUM dashboard.  Need to flesh the code out to use another
         // site.
         private val tracedHosts = listOf(
-            "datadoghq.com"
+            "datadoghq.com",
+            "win2019server.curryware.org"
         )
     }
 }

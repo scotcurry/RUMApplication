@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.datadog.android.log.Logger
 import kotlinx.coroutines.launch
 import org.curryware.rumapplication.BuildConfig
-import org.curryware.rumapplication.MainActivity
 import org.curryware.rumapplication.apimodels.organization.OrganizationInfo
 import org.curryware.rumapplication.repositories.APIHandlerRepository
 

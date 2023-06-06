@@ -42,6 +42,7 @@ android {
         buildConfigField("String", "USER_NAME", apikeyProperties['USER_NAME'])
         buildConfigField("String", "USER_ID", apikeyProperties['USER_ID'])
         buildConfigField("String", "USER_EMAIL", apikeyProperties['USER_EMAIL'])
+        buildConfigField("String", "CURRYWARE_URL", apikeyProperties['CURRYWARE_URL'])
     }
 
     buildTypes {
@@ -73,8 +74,8 @@ android {
 
 dependencies {
 
-    implementation 'com.datadoghq:dd-sdk-android:1.18.1'
-    implementation 'com.datadoghq:dd-sdk-android-compose:1.18.1'
+    implementation 'com.datadoghq:dd-sdk-android:1.19.1'
+    implementation 'com.datadoghq:dd-sdk-android-compose:1.19.1'
 
     implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'

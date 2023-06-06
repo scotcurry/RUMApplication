@@ -37,5 +37,9 @@ fun AppNavigationComponent(navController: NavHostController) {
         composable("usageSummaryScreen") {
             UsageSummaryScreen()
         }
+
+        composable("sqlQueryScreen") {
+            SQLQueryScreen()
+        }
     }
 }

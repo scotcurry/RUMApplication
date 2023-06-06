@@ -8,18 +8,18 @@ import org.curryware.rumapplication.BuildConfig
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object RestRetroFitBuilder {
+object SQLRestRetroFitBuilder {
 
     private val retrofit by lazy {
 
-        val tracedHosts = listOf("datadoghq.com")
+        val tracedHosts = listOf("win2019server.curryware.org")
         val httpClient = OkHttpClient.Builder()
             .addInterceptor(DatadogInterceptor(tracedHosts))
             .addNetworkInterceptor(TracingInterceptor(tracedHosts))
             .eventListenerFactory(DatadogEventListener.Factory())
         val builtClient = httpClient.build()
 
-        val apiURL = BuildConfig.API_URL
+        val apiURL = BuildConfig.CURRYWARE_URL
 
         httpClient.let {
             Retrofit.Builder()
@@ -31,7 +31,7 @@ object RestRetroFitBuilder {
 
     }
 
-    val restAPIWorker: RestAPIWorker by lazy {
-        retrofit.create(RestAPIWorker::class.java)
+    val sqlRestAPIWorker: SQLRestAPIWorker by lazy {
+        retrofit.create(SQLRestAPIWorker::class.java)
     }
 }

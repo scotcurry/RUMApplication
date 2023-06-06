@@ -15,7 +15,6 @@ import androidx.navigation.compose.rememberNavController
 import com.datadog.android.Datadog
 import com.datadog.android.rum.GlobalRum
 import com.datadog.android.rum.RumMonitor
-import com.datadog.android.rum.RumMonitor.*
 import org.curryware.rumapplication.datadoghandler.DatadogConfigurator
 import org.curryware.rumapplication.ui.composables.AppNavigationComponent
 import org.curryware.rumapplication.ui.theme.RUMApplicationTheme
@@ -32,7 +31,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // IMPORTANT: This is how you get context.  Need this alot.
+        // IMPORTANT: This is how you get context.  Need this a lot.
         val activityContext = this
         val logger = DatadogConfigurator.getDatadogLogger(activityContext)
         val monitor = RumMonitor.Builder().build()
