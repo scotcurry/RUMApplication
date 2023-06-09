@@ -34,6 +34,10 @@ fun AppNavigationComponent(navController: NavHostController) {
             ValidateAPIKeyScreen(navController)
         }
 
+        composable("validatedScreen") {
+            ValidationSuccessScreen()
+        }
+
         composable("usageSummaryScreen") {
             UsageSummaryScreen()
         }

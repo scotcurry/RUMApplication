@@ -2,6 +2,7 @@ package org.curryware.rumapplication.ui.composables
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,7 +35,7 @@ fun ValidateAPIKeyScreen(navController: NavController) {
     GlobalRum.get().addUserAction(RumActionType.CLICK, "Calling monitor", rumCustomAttributes)
     GlobalRum.get().startView("ValidateAPIScreen", "ValidateAPIKeyScreen", rumCustomAttributes)
 
-    var imageID = 0
+    val imageID: Int
     val restAPIHelper = RestAPIHelper(RestRetroFitBuilder.restAPIWorker)
     val validateAPIKeyViewModel: ValidateAPIKeyViewModel = viewModel(factory = ValidateAPIKeyViewModelFactory(restAPIHelper, logger))
     validateAPIKeyViewModel.checkDatadogAPIKey()
@@ -53,6 +54,12 @@ fun ValidateAPIKeyScreen(navController: NavController) {
         Spacer(modifier = Modifier)
         Image(painter = painterResource(id = imageID),
             contentDescription = "Valid")
+        if (isKeyValid != null && isKeyValid) {
+            Button(onClick = { navController.navigate("validatedScreen") },
+                modifier = Modifier) {
+                Text(text = "Next")
+            }
+        }
     }
 
     GlobalRum.get().stopView("ValidateAPIScreen")

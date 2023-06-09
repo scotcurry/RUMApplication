@@ -12,7 +12,7 @@ object SQLRestRetroFitBuilder {
 
     private val retrofit by lazy {
 
-        val tracedHosts = listOf("win2019server.curryware.org")
+        val tracedHosts = listOf("curryware.org")
         val httpClient = OkHttpClient.Builder()
             .addInterceptor(DatadogInterceptor(tracedHosts))
             .addNetworkInterceptor(TracingInterceptor(tracedHosts))
