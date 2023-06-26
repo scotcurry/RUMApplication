@@ -25,15 +25,18 @@ class MainActivity : ComponentActivity() {
         private val TAG: String? = MainActivity::class.simpleName
     }
 
-    // private val ENV_TAG: String = "prod"
-    // private val VARIANT_TAG: String = "v0.1"
+    private val ENV_TAG: String = "prod"
+    private val VARIANT_TAG: String = "v0.1"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // IMPORTANT: This is how you get context.  Need this a lot.
         val activityContext = this
-        val logger = DatadogConfigurator.getDatadogLogger(activityContext)
+
+        // Initialize the Datadog libraries.
+        DatadogConfigurator.initializeDD(activityContext)
+        val logger = DatadogConfigurator.getDatadogLogger()
         val monitor = RumMonitor.Builder().build()
         GlobalRum.registerIfAbsent(monitor)
 

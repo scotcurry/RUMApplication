@@ -7,4 +7,5 @@ import java.util.logging.Logger
 class SQLAPIHandlerRepository(private val sqlRestAPIHelper: SQLRestAPIHelper): ViewModel() {
 
     suspend fun getSalesTaxData() = sqlRestAPIHelper.getStateSalesTax()
+    suspend fun getEmployeeList() = sqlRestAPIHelper.getEmployeeList()
 }

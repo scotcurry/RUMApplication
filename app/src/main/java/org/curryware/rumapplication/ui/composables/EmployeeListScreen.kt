@@ -18,31 +18,24 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.datadog.android.rum.GlobalRum
-import com.datadog.android.rum.RumActionType
 import org.curryware.rumapplication.datadoghandler.DatadogConfigurator
 import org.curryware.rumapplication.resthandler.SQLRestAPIHelper
 import org.curryware.rumapplication.resthandler.SQLRestRetroFitBuilder
-import org.curryware.rumapplication.sqlquerymodels.StateSalesTax
+import org.curryware.rumapplication.sqlquerymodels.EmployeeDetail
+import org.curryware.rumapplication.sqlquerymodels.EmployeeList
 import org.curryware.rumapplication.viewmodels.SQLDatabaseViewModel
 import org.curryware.rumapplication.viewmodels.SQLDatabaseViewModelFactory
 
 @Composable
-fun SQLQueryScreen( modifier: Modifier = Modifier ) {
+fun EmployeeListScreen( modifier: Modifier = Modifier ) {
 
-    GlobalRum.get().startView("OrganizationScreen", "OrganizationScreen")
     val logger = DatadogConfigurator.getDatadogLogger()
-
-    val rumCustomAttributes = mutableMapOf<String, String>()
-    rumCustomAttributes["rumCustomAttributes"] = "Find this in a SQLQueryScreen Custom Attributes Section"
-    GlobalRum.get().addUserAction(RumActionType.CLICK, "Calling monitor", rumCustomAttributes)
-    GlobalRum.get().startView("SQLQueryScreen", "SQLQueryScreen", rumCustomAttributes)
 
     val sqlRestAPIHelper = SQLRestAPIHelper(SQLRestRetroFitBuilder.sqlRestAPIWorker)
     val databaseViewModel: SQLDatabaseViewModel = viewModel(factory = SQLDatabaseViewModelFactory(sqlRestAPIHelper, logger))
-    databaseViewModel.getSalesTaxInfo()
-
-    val salesTaxData by databaseViewModel.stateTaxDataValue.observeAsState(initial = null)
+    databaseViewModel.getEmployeeList()
+    val employeeList by databaseViewModel.employeeListReturnValue.observeAsState(initial = null)
+    var counter = 0
 
     Column(
         modifier = modifier
@@ -51,20 +44,20 @@ fun SQLQueryScreen( modifier: Modifier = Modifier ) {
             .background(backgroundColor)
             .verticalScroll(rememberScrollState())
     ) {
-        salesTaxData?.stateSalesTaxList?.forEach { stateSalesTax ->
-            StateTaxRow(stateSalesTax = stateSalesTax)
+        employeeList?.employeeNameRecords?.forEach { employeeRecord ->
+            EmployeeRow(employeeRow = employeeRecord)
         }
     }
 }
 
 @Composable
-fun StateTaxRow(stateSalesTax: StateSalesTax) {
-    Card(modifier = Modifier
+fun EmployeeRow(employeeRow: EmployeeDetail) {
+    Card( modifier = Modifier
         .padding(all = 10.dp)
         .fillMaxWidth()) {
         Column(modifier = Modifier.padding(all = 10.dp)) {
-            Text(stateSalesTax.StateName!!, fontSize = 20.sp)
-            Text(stateSalesTax.TaxRate!!.toString())
+            Text(employeeRow.FirstName!!.toString(), fontSize = 15.sp)
+            Text(employeeRow.LastName!!.toString(), fontSize = 20.sp)
         }
     }
 }

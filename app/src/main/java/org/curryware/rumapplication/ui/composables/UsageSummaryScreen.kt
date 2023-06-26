@@ -17,7 +17,7 @@ fun UsageSummaryScreen() {
 
     GlobalRum.get().startView("UsageSummaryScreen", "UsageSummaryScreen")
     val context = LocalContext.current
-    val logger = DatadogConfigurator.getDatadogLogger(context)
+    val logger = DatadogConfigurator.getDatadogLogger()
 
     val restAPIHelper = RestAPIHelper(RestRetroFitBuilder.restAPIWorker)
     val getUsageSummaryViewModel: GetUsageSummaryViewModel = viewModel(factory = GetUsageSummaryViewModelFactory(restAPIHelper, logger))

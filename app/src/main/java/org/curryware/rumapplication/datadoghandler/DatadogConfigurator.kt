@@ -21,18 +21,9 @@ class DatadogConfigurator {
         private const val VARIANT_TAG: String = "0.1.0"
         private val TAG: String? = DatadogConfigurator::class.simpleName
 
-        fun getDatadogLogger(context: Context): Logger {
+        fun getDatadogLogger(): Logger {
 
             // TODO: At some point this needs to be updated to show the flow of granting consent, it
-            // current just defaults to granting that consent.
-            val trackingConsent = TrackingConsent.GRANTED
-
-            Datadog.initialize(
-                context,
-                createDatadogCredentials(),
-                createDatadogConfiguration(),
-                trackingConsent
-            )
 
             return Logger.Builder()
                 .setLoggerName("android_logger")
@@ -42,6 +33,21 @@ class DatadogConfigurator {
                 .setBundleWithRumEnabled(true)
                 .setBundleWithTraceEnabled(true)
                 .build()
+        }
+
+        fun initializeDD(
+            context: Context
+        ) {
+            if (!Datadog.isInitialized()) {
+                val trackingConsent = TrackingConsent.GRANTED
+
+                Datadog.initialize(
+                    context,
+                    createDatadogCredentials(),
+                    createDatadogConfiguration(),
+                    trackingConsent
+                )
+            }
         }
 
         private fun createDatadogCredentials(): Credentials {
@@ -73,6 +79,7 @@ class DatadogConfigurator {
                 .useViewTrackingStrategy(trackingStrategy())
                 .useSite(DatadogSite.US1)
                 .setFirstPartyHosts(tracedHosts)
+                .sampleRumSessions(95.0F)
 
             return configBuilder.build()
         }

@@ -28,7 +28,6 @@ object SQLRestRetroFitBuilder {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
         }
-
     }
 
     val sqlRestAPIWorker: SQLRestAPIWorker by lazy {

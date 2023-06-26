@@ -26,7 +26,7 @@ import org.curryware.rumapplication.viewmodels.ValidateAPIKeyViewModelFactory
 fun ValidateAPIKeyScreen(navController: NavController) {
 
     val context = LocalContext.current
-    val logger = DatadogConfigurator.getDatadogLogger(context)
+    val logger = DatadogConfigurator.getDatadogLogger()
 
     // val monitor = RumMonitor.Builder().build()
     // GlobalRum.registerIfAbsent(monitor)

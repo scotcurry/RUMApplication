@@ -14,7 +14,7 @@ import org.curryware.rumapplication.datadoghandler.DatadogConfigurator
 fun ValidationSuccessScreen() {
 
     val context = LocalContext.current
-    val logger = DatadogConfigurator.getDatadogLogger(context)
+    val logger = DatadogConfigurator.getDatadogLogger()
     logger.i("Showing Validation Screen")
 
     Column(modifier = Modifier.fillMaxSize(),

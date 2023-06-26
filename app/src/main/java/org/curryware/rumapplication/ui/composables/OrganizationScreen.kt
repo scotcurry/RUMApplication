@@ -18,7 +18,7 @@ fun OrganizationScreen() {
 
     GlobalRum.get().startView("OrganizationScreen", "OrganizationScreen")
     val context = LocalContext.current
-    val logger = DatadogConfigurator.getDatadogLogger(context)
+    val logger = DatadogConfigurator.getDatadogLogger()
 
     val restAPIHelper = RestAPIHelper(RestRetroFitBuilder.restAPIWorker)
     val getOrganizationInfoViewModel: GetOrganizationInfoViewModel = viewModel(factory = GetOrganizationViewModelFactory(restAPIHelper, logger))

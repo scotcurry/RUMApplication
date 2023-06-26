@@ -10,13 +10,14 @@ import com.datadog.android.rum.GlobalRum
 import com.datadog.android.rum.RumMonitor
 import kotlinx.coroutines.launch
 import org.curryware.rumapplication.repositories.SQLAPIHandlerRepository
+import org.curryware.rumapplication.sqlquerymodels.EmployeeList
 import org.curryware.rumapplication.sqlquerymodels.StateSalesTaxList
 
-class GetSalesTaxViewModel(private val sqlApiHandlerRepository: SQLAPIHandlerRepository,
+class SQLDatabaseViewModel(private val sqlApiHandlerRepository: SQLAPIHandlerRepository,
                            private val datadogLogger: Logger): ViewModel() {
 
     companion object {
-        private val TAG: String? = GetSalesTaxViewModel::class.simpleName
+        private val TAG: String? = SQLDatabaseViewModel::class.simpleName
     }
 
     fun getSalesTaxInfo() {
@@ -32,7 +33,7 @@ class GetSalesTaxViewModel(private val sqlApiHandlerRepository: SQLAPIHandlerRep
         GlobalRum.registerIfAbsent(monitor)
         val additionalRUMValues = mutableMapOf<String, String>()
         additionalRUMValues["method"] = "getSalesTaxInfo()"
-        GlobalRum.get().startView("GetSalesTaxViewModel", "StartView", additionalRUMValues)
+        GlobalRum.get().startView("SQLDatabaseViewModel.getSalesTaxInfo()", "StartView", additionalRUMValues)
 
         if (Datadog.isInitialized()) {
             Log.i(TAG, "Datadog is initialized - No Error")
@@ -42,10 +43,13 @@ class GetSalesTaxViewModel(private val sqlApiHandlerRepository: SQLAPIHandlerRep
 
         Log.i(TAG, "Launching GetSalesTaxViewModel")
         logger.i("Making API Call")
+        var counter = 0
         viewModelScope.launch {
+            counter++
             val response = sqlApiHandlerRepository.getSalesTaxData()
             Log.i(TAG, "Response Code: ${response.code()}")
             Log.i(TAG, "Message Body: ${response.body()}")
+            Log.i(TAG, "Counter Value: $counter")
             if (response.body() != null) {
                 val stateSalesTax = response.body()!!
                 stateTaxDataValue.postValue(stateSalesTax)
@@ -58,4 +62,35 @@ class GetSalesTaxViewModel(private val sqlApiHandlerRepository: SQLAPIHandlerRep
     }
 
     val stateTaxDataValue = MutableLiveData<StateSalesTaxList>()
+
+    fun getEmployeeList() {
+
+        val monitor = RumMonitor.Builder().build()
+        GlobalRum.registerIfAbsent(monitor)
+        val additionalRUMValues = mutableMapOf<String, String>()
+        additionalRUMValues["method"] = "getSalesTaxInfo()"
+        GlobalRum.get().startView("GetSalesTaxViewModel", "StartView", additionalRUMValues)
+
+        val logger = datadogLogger
+
+        var counter = 0
+        viewModelScope.launch {
+            counter++
+            val response = sqlApiHandlerRepository.getEmployeeList()
+            Log.i(TAG, "Response Code: ${response.code()}")
+            Log.i(TAG, "Message Body: ${response.body()}")
+            if (response.body() != null) {
+                val employeeList = response.body()!!
+                val listSize = employeeList.employeeNameRecords?.size
+                Log.i(TAG, listSize.toString())
+                employeeListReturnValue.postValue(employeeList)
+                logger.i("Valid response to query")
+            } else {
+                logger.e("No response from SQL Server Request")
+                Log.i(TAG, "Error retrieving data")
+            }
+        }
+    }
+
+    val employeeListReturnValue = MutableLiveData<EmployeeList>()
 }
