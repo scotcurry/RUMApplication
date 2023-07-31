@@ -47,7 +47,11 @@ fun AppNavigationComponent(navController: NavHostController) {
         }
 
         composable("employeeListScreen") {
-            EmployeeListScreen()
+            EmployeeListScreen(navController)
+        }
+
+        composable("employeeDetailScreen/{userID}") {
+            EmployeeDetailScreen(navController)
         }
     }
 }
