@@ -6,9 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.datadog.android.Datadog
 import com.datadog.android.log.Logger
-import com.datadog.android.rum.GlobalRum
-import com.datadog.android.rum.RumMonitor
 import kotlinx.coroutines.launch
+import org.curryware.rumapplication.datadoghandler.DatadogLogger
 import org.curryware.rumapplication.repositories.SQLAPIHandlerRepository
 import org.curryware.rumapplication.sqlquerymodels.EmployeeList
 import org.curryware.rumapplication.sqlquerymodels.StateSalesTaxList
@@ -29,11 +28,6 @@ class SQLDatabaseViewModel(private val sqlApiHandlerRepository: SQLAPIHandlerRep
             logger.i("sqlApiHandlerRepository - Datadog is Initialized")
         }
 
-        val monitor = RumMonitor.Builder().build()
-        GlobalRum.registerIfAbsent(monitor)
-        val additionalRUMValues = mutableMapOf<String, String>()
-        additionalRUMValues["method"] = "getSalesTaxInfo()"
-        GlobalRum.get().startView("SQLDatabaseViewModel.getSalesTaxInfo()", "StartView", additionalRUMValues)
 
         if (Datadog.isInitialized()) {
             Log.i(TAG, "Datadog is initialized - No Error")
@@ -65,13 +59,7 @@ class SQLDatabaseViewModel(private val sqlApiHandlerRepository: SQLAPIHandlerRep
 
     fun getEmployeeList() {
 
-        val monitor = RumMonitor.Builder().build()
-        GlobalRum.registerIfAbsent(monitor)
-        val additionalRUMValues = mutableMapOf<String, String>()
-        additionalRUMValues["method"] = "getSalesTaxInfo()"
-        GlobalRum.get().startView("GetSalesTaxViewModel", "StartView", additionalRUMValues)
-
-        val logger = datadogLogger
+        val logger = DatadogLogger.getLogger()
 
         var counter = 0
         viewModelScope.launch {

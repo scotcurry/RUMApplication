@@ -9,14 +9,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.datadog.android.rum.GlobalRum
-import com.datadog.android.rum.RumActionType
 import org.curryware.rumapplication.R
-import org.curryware.rumapplication.datadoghandler.DatadogConfigurator
+import org.curryware.rumapplication.datadoghandler.DatadogLogger
 import org.curryware.rumapplication.resthandler.RestAPIHelper
 import org.curryware.rumapplication.resthandler.RestRetroFitBuilder
 import org.curryware.rumapplication.viewmodels.ValidateAPIKeyViewModel
@@ -25,15 +22,14 @@ import org.curryware.rumapplication.viewmodels.ValidateAPIKeyViewModelFactory
 @Composable
 fun ValidateAPIKeyScreen(navController: NavController) {
 
-    val context = LocalContext.current
-    val logger = DatadogConfigurator.getDatadogLogger()
+    val logger = DatadogLogger.getLogger()
 
     // val monitor = RumMonitor.Builder().build()
     // GlobalRum.registerIfAbsent(monitor)
     val rumCustomAttributes = mutableMapOf<String, String>()
     rumCustomAttributes["rumCustomAttributes"] = "Find this in a ValidateAPIScreen Custom Attributes Section"
-    GlobalRum.get().addUserAction(RumActionType.CLICK, "Calling monitor", rumCustomAttributes)
-    GlobalRum.get().startView("ValidateAPIScreen", "ValidateAPIKeyScreen", rumCustomAttributes)
+    // GlobalRum.get().addUserAction(RumActionType.CLICK, "Calling monitor", rumCustomAttributes)
+    // GlobalRum.get().startView("ValidateAPIScreen", "ValidateAPIKeyScreen", rumCustomAttributes)
 
     val imageID: Int
     val restAPIHelper = RestAPIHelper(RestRetroFitBuilder.restAPIWorker)
@@ -62,5 +58,5 @@ fun ValidateAPIKeyScreen(navController: NavController) {
         }
     }
 
-    GlobalRum.get().stopView("ValidateAPIScreen")
+    // GlobalRum.get().stopView("ValidateAPIScreen")
 }

@@ -4,10 +4,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.datadog.android.rum.GlobalRum
-import org.curryware.rumapplication.datadoghandler.DatadogConfigurator
+import org.curryware.rumapplication.datadoghandler.DatadogLogger
 import org.curryware.rumapplication.resthandler.RestAPIHelper
 import org.curryware.rumapplication.resthandler.RestRetroFitBuilder
 import org.curryware.rumapplication.viewmodels.GetOrganizationInfoViewModel
@@ -16,9 +14,9 @@ import org.curryware.rumapplication.viewmodels.GetOrganizationViewModelFactory
 @Composable
 fun OrganizationScreen() {
 
-    GlobalRum.get().startView("OrganizationScreen", "OrganizationScreen")
-    val context = LocalContext.current
-    val logger = DatadogConfigurator.getDatadogLogger()
+    // GlobalRum.get().startView("OrganizationScreen", "OrganizationScreen")
+    // val context = LocalContext.current
+    val logger = DatadogLogger.getLogger()
 
     val restAPIHelper = RestAPIHelper(RestRetroFitBuilder.restAPIWorker)
     val getOrganizationInfoViewModel: GetOrganizationInfoViewModel = viewModel(factory = GetOrganizationViewModelFactory(restAPIHelper, logger))
@@ -32,6 +30,4 @@ fun OrganizationScreen() {
     }?:run {
         Text("Unknown")
     }
-
-    GlobalRum.get().stopView("OrganizationScreen")
 }

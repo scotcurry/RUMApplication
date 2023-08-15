@@ -18,9 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.datadog.android.rum.GlobalRum
-import com.datadog.android.rum.RumActionType
-import org.curryware.rumapplication.datadoghandler.DatadogConfigurator
+import org.curryware.rumapplication.datadoghandler.DatadogLogger
 import org.curryware.rumapplication.resthandler.SQLRestAPIHelper
 import org.curryware.rumapplication.resthandler.SQLRestRetroFitBuilder
 import org.curryware.rumapplication.sqlquerymodels.StateSalesTax
@@ -30,13 +28,13 @@ import org.curryware.rumapplication.viewmodels.SQLDatabaseViewModelFactory
 @Composable
 fun SQLQueryScreen( modifier: Modifier = Modifier ) {
 
-    GlobalRum.get().startView("OrganizationScreen", "OrganizationScreen")
-    val logger = DatadogConfigurator.getDatadogLogger()
+    // GlobalRum.get().startView("OrganizationScreen", "OrganizationScreen")
+    val logger = DatadogLogger.getLogger()
 
     val rumCustomAttributes = mutableMapOf<String, String>()
     rumCustomAttributes["rumCustomAttributes"] = "Find this in a SQLQueryScreen Custom Attributes Section"
-    GlobalRum.get().addUserAction(RumActionType.CLICK, "Calling monitor", rumCustomAttributes)
-    GlobalRum.get().startView("SQLQueryScreen", "SQLQueryScreen", rumCustomAttributes)
+    // GlobalRum.get().addUserAction(RumActionType.CLICK, "Calling monitor", rumCustomAttributes)
+    // GlobalRum.get().startView("SQLQueryScreen", "SQLQueryScreen", rumCustomAttributes)
 
     val sqlRestAPIHelper = SQLRestAPIHelper(SQLRestRetroFitBuilder.sqlRestAPIWorker)
     val databaseViewModel: SQLDatabaseViewModel = viewModel(factory = SQLDatabaseViewModelFactory(sqlRestAPIHelper, logger))

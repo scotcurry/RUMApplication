@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.datadog.android.Datadog
 import com.datadog.android.log.Logger
-import com.datadog.android.rum.GlobalRum
 import kotlinx.coroutines.launch
 import org.curryware.rumapplication.BuildConfig
 import org.curryware.rumapplication.apimodels.usagesummary.UsageSummary
@@ -32,7 +31,7 @@ class GetUsageSummaryViewModel(private val apiHandlerRepository: APIHandlerRepos
         //GlobalRum.registerIfAbsent(monitor)
         val additionalRUMValues = mutableMapOf<String, String>()
         additionalRUMValues["method"] = "checkDatadogAPIKey()"
-        GlobalRum.get().startView("GetUsageSummaryViewModel", "StartView", additionalRUMValues)
+        // GlobalRum.get().startView("GetUsageSummaryViewModel", "StartView", additionalRUMValues)
 
         if (Datadog.isInitialized()) {
             Log.i(TAG, "Datadog is initialized - No Error")

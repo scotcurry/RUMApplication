@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.datadog.android.Datadog
 import com.datadog.android.log.Logger
-import com.datadog.android.rum.*
 import kotlinx.coroutines.launch
 import org.curryware.rumapplication.BuildConfig
 import org.curryware.rumapplication.apimodels.ValidateKey
@@ -21,18 +20,14 @@ class ValidateAPIKeyViewModel(private val apiHandlerRepository: APIHandlerReposi
 
     fun checkDatadogAPIKey() {
 
-        //val logger = configureDatadog()
         val logger = datadogLogger
 
         if (Datadog.isInitialized()) {
             logger.i("ValidateAPIKeyViewModel - Datadog is Initialized")
         }
 
-        // val monitor = RumMonitor.Builder().build()
-        //GlobalRum.registerIfAbsent(monitor)
         val additionalRUMValues = mutableMapOf<String, String>()
         additionalRUMValues["method"] = "checkDatadogAPIKey()"
-        GlobalRum.get().startView("ValidateAPIKeyViewModel", "StartView", additionalRUMValues)
 
         if (Datadog.isInitialized()) {
             Log.i(TAG, "Datadog is initialized - No Error")
@@ -55,19 +50,6 @@ class ValidateAPIKeyViewModel(private val apiHandlerRepository: APIHandlerReposi
                 apiCheckReturnValue.postValue(apiCheckDataBody)
             }
         }
-        GlobalRum.get().stopView("ValidateAPIKeyViewModel")
-    }
-
-    private fun configureDatadog(): Logger {
-
-        Datadog.setVerbosity(Log.INFO)
-
-        return Logger.Builder()
-            .setLoggerName("android_logger")
-            .setDatadogLogsEnabled(true)
-            .setLogcatLogsEnabled(true)
-            .setNetworkInfoEnabled(true)
-            .build()
     }
 
     val apiCheckReturnValue = MutableLiveData<ValidateKey>()

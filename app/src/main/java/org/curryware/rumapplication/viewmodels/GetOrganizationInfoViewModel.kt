@@ -28,7 +28,7 @@ class GetOrganizationInfoViewModel(private val apiHandlerRepository: APIHandlerR
             Log.i(TAG, "Message Body: ${response.body()}")
             if (response.body() != null) {
                 val organizationDataBody = response.body()!!
-                val organizationType = organizationDataBody.orgs?.get(0)?.subscription?.type
+                val organizationType = organizationDataBody.orgs.get(0).subscription?.type
                 datadogLogger.i("Subscription Type: $organizationType")
                 organizationReturnValue.postValue(organizationDataBody)
             }

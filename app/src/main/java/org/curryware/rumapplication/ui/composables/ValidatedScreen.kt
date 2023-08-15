@@ -7,14 +7,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import org.curryware.rumapplication.datadoghandler.DatadogConfigurator
+import org.curryware.rumapplication.datadoghandler.DatadogLogger
 
 @Composable
 fun ValidationSuccessScreen() {
 
-    val context = LocalContext.current
-    val logger = DatadogConfigurator.getDatadogLogger()
+    val logger = DatadogLogger.getLogger()
     logger.i("Showing Validation Screen")
 
     Column(modifier = Modifier.fillMaxSize(),
