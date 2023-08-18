@@ -14,10 +14,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 
 import com.datadog.android.Datadog
+import com.datadog.android.compose.NavigationViewTrackingEffect
 import com.datadog.android.core.configuration.Configuration
 import com.datadog.android.privacy.TrackingConsent
 import com.datadog.android.rum.Rum
 import com.datadog.android.rum.RumConfiguration
+import com.datadog.android.rum.tracking.AcceptAllNavDestinations
 import com.datadog.android.trace.AndroidTracer
 import com.datadog.android.trace.Trace
 import com.datadog.android.trace.TraceConfiguration
@@ -38,12 +40,19 @@ class MainActivity : ComponentActivity() {
 
         // Everything is well documented in the source.
         // https://github.com/DataDog/dd-sdk-android/blob/develop/sample/kotlin/src/main/kotlin/com/datadog/android/sample/SampleApplication.kt
+        val tracedHosts = listOf(
+            "win2019server.curryware.org",
+            "datadoghq.com"
+        )
         val client_token = BuildConfig.ANDROID_CLIENT_TOKEN
         val configuration = Configuration.Builder(
             clientToken = BuildConfig.ANDROID_CLIENT_TOKEN,
             env = "prod",
             variant = BuildConfig.ANDROID_APP_ID
-        ).build()
+        )
+            .setFirstPartyHosts(tracedHosts)
+            .build()
+
         Datadog.initialize(this, configuration, TrackingConsent.GRANTED)
 
         val applicationID = BuildConfig.ANDROID_APP_ID
@@ -73,7 +82,11 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 
-            val navController = rememberNavController()
+            // Had to look this up using the source file.
+            // https://github.com/Datadog/dd-sdk-android/tree/develop/integrations/dd-sdk-android-compose
+            val navController = rememberNavController().apply { 
+                NavigationViewTrackingEffect(navController = this, trackArguments = false, destinationPredicate = AcceptAllNavDestinations())
+            }
             RUMApplicationTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(

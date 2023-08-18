@@ -13,7 +13,6 @@ import org.curryware.rumapplication.viewmodels.GetUsageSummaryViewModelFactory
 @Composable
 fun UsageSummaryScreen() {
 
-    // GlobalRum.get().startView("UsageSummaryScreen", "UsageSummaryScreen")
     val logger = DatadogLogger.getLogger()
 
     val restAPIHelper = RestAPIHelper(RestRetroFitBuilder.restAPIWorker)

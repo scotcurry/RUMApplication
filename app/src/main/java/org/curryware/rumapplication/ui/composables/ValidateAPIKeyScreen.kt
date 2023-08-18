@@ -50,7 +50,7 @@ fun ValidateAPIKeyScreen(navController: NavController) {
         Spacer(modifier = Modifier)
         Image(painter = painterResource(id = imageID),
             contentDescription = "Valid")
-        if (isKeyValid != null && isKeyValid) {
+        if ((isKeyValid != null) && isKeyValid) {
             Button(onClick = { navController.navigate("validatedScreen") },
                 modifier = Modifier) {
                 Text(text = "Next")

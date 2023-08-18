@@ -1,10 +1,14 @@
-import java.util.regex.Pattern
-
 buildscript {
     dependencies {
         classpath 'com.datadoghq:dd-sdk-android-gradle-plugin:1.10.0'
     }
+    apply plugin: "com.datadoghq.dd-sdk-android-gradle-plugin"
+    datadog {
+        site = "US1"
+    }
 }
+
+
 
 plugins {
     id 'com.android.application'
@@ -45,6 +49,7 @@ android {
         buildConfigField("String", "USER_ID", apikeyProperties['USER_ID'])
         buildConfigField("String", "USER_EMAIL", apikeyProperties['USER_EMAIL'])
         buildConfigField("String", "CURRYWARE_URL", apikeyProperties['CURRYWARE_URL'])
+        buildConfigField("String", "TRACED_URLS", apikeyProperties['TRACED_URLS'])
     }
 
     buildTypes {
@@ -59,7 +64,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
-        // freeCompilerArgs += '-Xjvm-default=compatibility'
     }
     buildFeatures {
         compose true

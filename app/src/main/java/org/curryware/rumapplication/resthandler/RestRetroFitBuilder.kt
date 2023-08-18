@@ -1,6 +1,8 @@
 package org.curryware.rumapplication.resthandler
 
+import com.datadog.android.okhttp.DatadogEventListener
 import com.datadog.android.okhttp.DatadogInterceptor
+import com.datadog.android.okhttp.trace.TracingInterceptor
 import okhttp3.OkHttpClient
 import org.curryware.rumapplication.BuildConfig
 import retrofit2.Retrofit
@@ -11,7 +13,9 @@ object RestRetroFitBuilder {
     private val retrofit by lazy {
 
         val httpClient = OkHttpClient.Builder()
-            .addInterceptor(DatadogInterceptor())
+            .addInterceptor(DatadogInterceptor("datadoghq.com"))
+            .addNetworkInterceptor(TracingInterceptor("datadoghq.com"))
+            .eventListenerFactory(DatadogEventListener.Factory())
         val builtClient = httpClient.build()
 
         val apiURL = BuildConfig.API_URL
