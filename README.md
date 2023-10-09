@@ -31,7 +31,7 @@ val navController = rememberNavController().apply {
 ```
 
 MainActivity.kt also has all of the Datadog initialization code.  Might want to move this to a separate file at some point.
-** 10-92-23 Update** Moved the log configuration builder into a separate call.  It is added "for free" with RUM, but there is
+**10-92-23 Update** Moved the log configuration builder into a separate call.  It is added "for free" with RUM, but there is
 slightly more configuration available with the way it is implemented below.
 ```
         // Everything is well documented in the source.
