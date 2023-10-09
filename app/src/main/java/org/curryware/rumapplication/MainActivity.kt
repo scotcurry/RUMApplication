@@ -16,6 +16,9 @@ import androidx.navigation.compose.rememberNavController
 import com.datadog.android.Datadog
 import com.datadog.android.compose.NavigationViewTrackingEffect
 import com.datadog.android.core.configuration.Configuration
+import com.datadog.android.log.Logger
+import com.datadog.android.log.Logs
+import com.datadog.android.log.LogsConfiguration
 import com.datadog.android.privacy.TrackingConsent
 import com.datadog.android.rum.Rum
 import com.datadog.android.rum.RumConfiguration
@@ -24,7 +27,6 @@ import com.datadog.android.trace.AndroidTracer
 import com.datadog.android.trace.Trace
 import com.datadog.android.trace.TraceConfiguration
 import io.opentracing.util.GlobalTracer
-import org.curryware.rumapplication.datadoghandler.DatadogLogger
 
 import org.curryware.rumapplication.ui.composables.AppNavigationComponent
 import org.curryware.rumapplication.ui.theme.RUMApplicationTheme
@@ -44,7 +46,8 @@ class MainActivity : ComponentActivity() {
             "win2019server.curryware.org",
             "datadoghq.com"
         )
-        val client_token = BuildConfig.ANDROID_CLIENT_TOKEN
+        val applicationID = BuildConfig.ANDROID_APP_ID
+        val clientToken = BuildConfig.ANDROID_CLIENT_TOKEN
         val configuration = Configuration.Builder(
             clientToken = BuildConfig.ANDROID_CLIENT_TOKEN,
             env = "prod",
@@ -53,23 +56,36 @@ class MainActivity : ComponentActivity() {
             .setFirstPartyHosts(tracedHosts)
             .build()
 
+        // Since we have broken functionality into separate libraries, logging and RUM can and in
+        // my opinion should have separate configurations.  You do get logging "for free" if you
+        // do this configuration and enable logs.
         Datadog.initialize(this, configuration, TrackingConsent.GRANTED)
 
-        val applicationID = BuildConfig.ANDROID_APP_ID
         val rumConfiguration = RumConfiguration.Builder(applicationID)
-            .trackFrustrations(true)
-            .trackUserInteractions()
+             .trackFrustrations(true)
+             .trackUserInteractions()
             .setTelemetrySampleRate(100f)
             .build()
         Rum.enable(rumConfiguration)
 
-        Log.i(TAG, "Client Token: $client_token")
-        Log.i(TAG, "Application ID: $applicationID")
+        Datadog.setVerbosity(Log.INFO)
+        val logConfiguration = LogsConfiguration.Builder().build()
+        Logs.enable(logsConfiguration = logConfiguration)
 
-        val logger = DatadogLogger.getLogger()
+        val logger = Logger.Builder()
+            .setNetworkInfoEnabled(true)
+            .setLogcatLogsEnabled(false)
+            .setRemoteSampleRate(100f)
+            .setName("AndroidRUM")
+            .setService("RUMApplication")
+            .build()
+
+        logger.i("Using clientToken $clientToken")
         if (Datadog.isInitialized()) {
             Log.i(TAG,"Datadog Initialized")
             logger.i("Datadog Initialized")
+            logger.i("Using clientToken $clientToken")
+            logger.d("Debug Message Tester")
         }
 
         // https://docs.datadoghq.com/tracing/trace_collection/dd_libraries/android/?tab=kotlin
@@ -78,7 +94,12 @@ class MainActivity : ComponentActivity() {
         val tracer = AndroidTracer.Builder().build()
         GlobalTracer.registerIfAbsent(tracer)
 
-        logger.i("Initialize Datadog Libraries" )
+        if (Datadog.isInitialized()) {
+            logger.i("Initialize Datadog Libraries")
+            Log.i(TAG, "Client Token: $clientToken")
+            Log.i(TAG, "Application ID: $applicationID")
+            Datadog.setUserInfo("id:1234", "Scot Curry", "scotcurry4@gmail.com")
+        }
 
         setContent {
 
@@ -102,13 +123,13 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String) {
+private fun Greeting(name: String) {
     Text(text = "Hello $name!")
 }
 
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
+private fun DefaultPreview() {
     RUMApplicationTheme {
         Greeting("Android")
     }

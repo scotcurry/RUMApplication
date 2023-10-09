@@ -24,6 +24,7 @@ class ValidateAPIKeyViewModel(private val apiHandlerRepository: APIHandlerReposi
 
         if (Datadog.isInitialized()) {
             logger.i("ValidateAPIKeyViewModel - Datadog is Initialized")
+            Log.d(TAG,"fun checkDatadogAPIKey")
         }
 
         val additionalRUMValues = mutableMapOf<String, String>()

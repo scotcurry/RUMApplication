@@ -22,6 +22,7 @@ import org.curryware.rumapplication.viewmodels.ValidateAPIKeyViewModelFactory
 @Composable
 fun ValidateAPIKeyScreen(navController: NavController) {
 
+    val TAG = "ValidateAPIKeyScreent"
     val logger = DatadogLogger.getLogger()
 
     // val monitor = RumMonitor.Builder().build()
@@ -30,6 +31,7 @@ fun ValidateAPIKeyScreen(navController: NavController) {
     rumCustomAttributes["rumCustomAttributes"] = "Find this in a ValidateAPIScreen Custom Attributes Section"
     // GlobalRum.get().addUserAction(RumActionType.CLICK, "Calling monitor", rumCustomAttributes)
     // GlobalRum.get().startView("ValidateAPIScreen", "ValidateAPIKeyScreen", rumCustomAttributes)
+
 
     val imageID: Int
     val restAPIHelper = RestAPIHelper(RestRetroFitBuilder.restAPIWorker)
@@ -55,6 +57,13 @@ fun ValidateAPIKeyScreen(navController: NavController) {
                 modifier = Modifier) {
                 Text(text = "Next")
             }
+        }
+        Button(onClick = {
+           logger.d("Getting Ready to Crash")
+            1 / 0
+                         },
+            modifier = Modifier) {
+            Text("Crash the App")
         }
     }
 
