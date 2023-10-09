@@ -1,5 +1,6 @@
-# Overview - Updated 8/17/2023
-
+# Overview - Updated 10/09/2023
+* Added a crash routine
+* 
 ## TODO
 
 - Build in Session replay
@@ -30,6 +31,8 @@ val navController = rememberNavController().apply {
 ```
 
 MainActivity.kt also has all of the Datadog initialization code.  Might want to move this to a separate file at some point.
+** 10-92-23 Update** Moved the log configuration builder into a separate call.  It is added "for free" with RUM, but there is
+slightly more configuration available with the way it is implemented below.
 ```
         // Everything is well documented in the source.
         // https://github.com/DataDog/dd-sdk-android/blob/develop/sample/kotlin/src/main/kotlin/com/datadog/android/sample/SampleApplication.kt
@@ -37,7 +40,8 @@ MainActivity.kt also has all of the Datadog initialization code.  Might want to 
             "win2019server.curryware.org",
             "datadoghq.com"
         )
-        val client_token = BuildConfig.ANDROID_CLIENT_TOKEN
+        val applicationID = BuildConfig.ANDROID_APP_ID
+        val clientToken = BuildConfig.ANDROID_CLIENT_TOKEN
         val configuration = Configuration.Builder(
             clientToken = BuildConfig.ANDROID_CLIENT_TOKEN,
             env = "prod",
@@ -46,23 +50,36 @@ MainActivity.kt also has all of the Datadog initialization code.  Might want to 
             .setFirstPartyHosts(tracedHosts)
             .build()
 
+        // Since we have broken functionality into separate libraries, logging and RUM can and in
+        // my opinion should have separate configurations.  You do get logging "for free" if you
+        // do this configuration and enable logs.
         Datadog.initialize(this, configuration, TrackingConsent.GRANTED)
 
-        val applicationID = BuildConfig.ANDROID_APP_ID
         val rumConfiguration = RumConfiguration.Builder(applicationID)
-            .trackFrustrations(true)
-            .trackUserInteractions()
+             .trackFrustrations(true)
+             .trackUserInteractions()
             .setTelemetrySampleRate(100f)
             .build()
         Rum.enable(rumConfiguration)
 
-        Log.i(TAG, "Client Token: $client_token")
-        Log.i(TAG, "Application ID: $applicationID")
+        Datadog.setVerbosity(Log.INFO)
+        val logConfiguration = LogsConfiguration.Builder().build()
+        Logs.enable(logsConfiguration = logConfiguration)
 
-        val logger = DatadogLogger.getLogger()
+        val logger = Logger.Builder()
+            .setNetworkInfoEnabled(true)
+            .setLogcatLogsEnabled(false)
+            .setRemoteSampleRate(100f)
+            .setName("AndroidRUM")
+            .setService("RUMApplication")
+            .build()
+
+        logger.i("Using clientToken $clientToken")
         if (Datadog.isInitialized()) {
             Log.i(TAG,"Datadog Initialized")
             logger.i("Datadog Initialized")
+            logger.i("Using clientToken $clientToken")
+            logger.d("Debug Message Tester")
         }
 
         // https://docs.datadoghq.com/tracing/trace_collection/dd_libraries/android/?tab=kotlin
@@ -71,7 +88,12 @@ MainActivity.kt also has all of the Datadog initialization code.  Might want to 
         val tracer = AndroidTracer.Builder().build()
         GlobalTracer.registerIfAbsent(tracer)
 
-        logger.i("Initialize Datadog Libraries" )
+        if (Datadog.isInitialized()) {
+            logger.i("Initialize Datadog Libraries")
+            Log.i(TAG, "Client Token: $clientToken")
+            Log.i(TAG, "Application ID: $applicationID")
+            Datadog.setUserInfo("id:1234", "Scot Curry", "scotcurry4@gmail.com")
+        }
 ```
 **DatadogLogger.kt**
 A static class to provide Datadog Logging
