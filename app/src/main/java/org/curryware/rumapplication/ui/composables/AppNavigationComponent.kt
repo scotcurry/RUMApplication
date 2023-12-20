@@ -7,10 +7,13 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.datadog.android.Datadog
+import org.curryware.rumapplication.setupvalidation.ValidateSettings
 
 @Composable
-fun AppNavigationComponent(navController: NavHostController) {
+fun AppNavigationComponent(
+    navController: NavHostController = rememberNavController()) {
 
     val TAG = "AppNavigationComponent"
     if (Datadog.isInitialized()) {
@@ -19,8 +22,18 @@ fun AppNavigationComponent(navController: NavHostController) {
         Log.e(TAG, "AppNavigationComponent - Datadog NOT Initialized")
     }
 
+    val validateSettings = ValidateSettings()
+
     NavHost(navController = navController, startDestination = "apiFunctionScreen", modifier = Modifier
         .fillMaxWidth()) {
+
+        composable("homeScreen") {
+            HomeScreen()
+        }
+
+        composable("consentScreen") {
+            ConsentScreen( consentAccepted = {} )
+        }
 
         composable("apiFunctionScreen") {
             APIFunctionsScreen(navController = navController)

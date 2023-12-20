@@ -27,6 +27,7 @@ import com.datadog.android.trace.AndroidTracer
 import com.datadog.android.trace.Trace
 import com.datadog.android.trace.TraceConfiguration
 import io.opentracing.util.GlobalTracer
+import org.curryware.rumapplication.setupvalidation.ValidateSettings
 
 import org.curryware.rumapplication.ui.composables.AppNavigationComponent
 import org.curryware.rumapplication.ui.theme.RUMApplicationTheme
@@ -39,6 +40,10 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val validateSettings = ValidateSettings()
+        val trackingConsent = validateSettings.getTrackingConsent(this)
+        val apiKeyValid = validateSettings.validateApiProperties()
 
         // Everything is well documented in the source.
         // https://github.com/DataDog/dd-sdk-android/blob/develop/sample/kotlin/src/main/kotlin/com/datadog/android/sample/SampleApplication.kt

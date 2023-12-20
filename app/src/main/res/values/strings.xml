@@ -2,4 +2,5 @@
     <string name="app_name">Datadog RUM</string>
     <string name="title_activity_organization_data_screen">OrganizationDataScreen</string>
     <string name="title_activity_organization_screen">OrganizationScreen</string>
+    <string name="tracking_consent_status">NOT_GRANTED</string>
 </resources>
