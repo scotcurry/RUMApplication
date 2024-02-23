@@ -23,6 +23,8 @@ import com.datadog.android.privacy.TrackingConsent
 import com.datadog.android.rum.Rum
 import com.datadog.android.rum.RumConfiguration
 import com.datadog.android.rum.tracking.AcceptAllNavDestinations
+import com.datadog.android.sessionreplay.SessionReplay
+import com.datadog.android.sessionreplay.SessionReplayConfiguration
 import com.datadog.android.trace.AndroidTracer
 import com.datadog.android.trace.Trace
 import com.datadog.android.trace.TraceConfiguration
@@ -105,6 +107,15 @@ class MainActivity : ComponentActivity() {
             Log.i(TAG, "Application ID: $applicationID")
             Datadog.setUserInfo("id:1234", "Scot Curry", "scotcurry4@gmail.com")
         }
+
+        val sessionReplayConfig = SessionReplayConfiguration.Builder(100.0F)
+            // .addExtensionSupport(MaterialExtensionSupport())
+            .build()
+        SessionReplay.enable(sessionReplayConfig)
+
+        Datadog.setVerbosity(Log.DEBUG)
+        Log.d(TAG, "Just Set Session Replay")
+
 
         setContent {
 
