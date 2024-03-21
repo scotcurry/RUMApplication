@@ -66,5 +66,9 @@ fun AppNavigationComponent(
         composable("employeeDetailScreen/{userID}") {
             EmployeeDetailScreen(navController)
         }
+
+        composable("webViewScreen") {
+            WebViewScreen()
+        }
     }
 }

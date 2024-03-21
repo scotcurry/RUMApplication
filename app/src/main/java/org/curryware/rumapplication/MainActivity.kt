@@ -28,6 +28,7 @@ import com.datadog.android.sessionreplay.SessionReplayConfiguration
 import com.datadog.android.trace.AndroidTracer
 import com.datadog.android.trace.Trace
 import com.datadog.android.trace.TraceConfiguration
+import com.datadog.android.webview.WebViewTracking
 import io.opentracing.util.GlobalTracer
 import org.curryware.rumapplication.setupvalidation.ValidateSettings
 
@@ -116,6 +117,7 @@ class MainActivity : ComponentActivity() {
         Datadog.setVerbosity(Log.DEBUG)
         Log.d(TAG, "Just Set Session Replay")
 
+        //WebViewTracking.enable()
 
         setContent {
 

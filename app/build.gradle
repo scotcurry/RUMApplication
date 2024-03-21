@@ -92,6 +92,7 @@ dependencies {
     implementation 'com.datadoghq:dd-sdk-android-trace:2.6.2'
     implementation 'com.datadoghq:dd-sdk-android-compose:2.6.2'
     implementation 'com.datadoghq:dd-sdk-android-okhttp:2.6.2'
+    implementation 'com.datadoghq:dd-sdk-android-webview:2.6.2'
     implementation 'com.datadoghq:dd-sdk-android-session-replay:2.6.2'
     implementation 'com.datadoghq:dd-sdk-android-session-replay-material:2.6.2'
 

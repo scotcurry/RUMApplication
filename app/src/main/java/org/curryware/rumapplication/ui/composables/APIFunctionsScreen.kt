@@ -53,5 +53,13 @@ fun APIFunctionsScreen(navController: NavController) {
                 .fillMaxWidth()) {
             Text(text = "Employee List")
         }
+
+        Button(
+            onClick = { navController.navigate(route = "WebViewScreen") },
+            modifier = Modifier
+                .padding(12.dp)
+                .fillMaxWidth()) {
+            Text(text = "WebView")
+        }
     }
 }
